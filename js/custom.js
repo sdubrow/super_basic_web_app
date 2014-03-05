@@ -1,65 +1,66 @@
 //d3.select("h1").text("What's up").style("color","steelblue");
-//d3.select(".container").insert("h2").text("hi");
-/* d3.select("p").remove(); */
+/* blah blah*/
 
-function makeStage(w, h) {
+function makeStage(w,h) {
 	var stage = d3.select(".container")
-	  .insert("center")
-	  .insert("svg")
-	  .attr("width",w)
-	  .attr("height",h);
+		.insert("center")
+		.insert("svg")
+		.attr("width",w)
+		.attr("height",h); //id = #, class = .	
 	return stage;
 }
 
-function clearStimulus(stage) {
+function clearStim(stage) {
 	stage.selectAll("circle").remove();
+
 }
 
-function drawStimulus(stage, cx, cy, radius, fillcolor) {
+
+function drawStim(stage,radius,circcolor) {
+	//console.log("I called my function");
 	stage.insert("circle")
-	  .attr("cx", cx)
-	  .attr("cy", cy)
-	  .attr("r",radius)
-	  .style("fill",fillcolor)
-	  .style("stroke","steelblue")
-	  .style("stroke-width","5px");
+		.attr("cx",200/2)
+		.attr("cy",200/2)
+		.attr("r",radius)
+		.style("fill",circcolor)
+		.style("stroke","gray")
+		.style("stroke-width","5px")
+	
 }
 
 function clearButton() {
 	d3.select(".container")
-	  .selectAll("button")
-	  .remove();
+	.selectAll("button")
+	.remove();
 }
 
 function makeButton(text, callback) {
 	d3.select(".container")
-      .insert("button")
-      .attr("type","button")
-      .attr("class","btn btn-primary btn-lg")
-      .text(text)
-      .on("click", function(d) { console.log("clicked"); callback(); } );
-
+		.insert("button")
+		.attr("type","button")
+		.attr("class","btn btn-default btn-lg")
+		.text(text)
+		.on("click", function(d) { console.log("clicked"); callback(); } );
 }
 
-var trials = [ {"color":"lightblue", "radius": 20},
-			   {"color":"yellow", "radius": 20},
-			   {"color":"red", "radius": 50},
-			   {"color":"blue","radius":20}
-			 ];
+//run functions
 
+var trials = [ {"color":"lightblue", "radius":20},
+				{"color":"lightyellow", "radius":50},
+				{"color":"lightgreen", "radius":10}
+				];
 
-var mystage = makeStage(500, 400);
-
-function doTrial(stage, stim_array) {
+var mystage = makeStage(500/2,400/2);
+function doTrial(stage,stim_array) {
 	if (stim_array.length > 0) {
-		var stim = stim_array.shift();
-		clearStimulus(stage);
-		clearButton();
-		drawStimulus(stage, 500/2., 400/2., stim["radius"], stim["color"]);
-		makeButton("Next trial", function () { doTrial(stage, stim_array); });
-	} else {
-		alert("i'm done with experiment");
+	stim = stim_array.shift(); //pops first one off and removes
+	clearStim(stage);
+	clearButton();
+	drawStim(stage,stim["radius"],stim["color"]);
+	makeButton("Next", function () {doTrial(stage,stim_array);});
 	}
+	else {alert("Done");}
+	
 }
 
-doTrial(mystage, trials); 
+doTrial(mystage,trials)
